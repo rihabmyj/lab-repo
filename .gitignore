@@ -1,0 +1,7 @@
+# Build output
+bin/
+obj/
+
+# Local secrets and configuration
+.env
+.env.*
