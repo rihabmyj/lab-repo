@@ -1,0 +1,15 @@
+# Build output
+bin/
+obj/
+
+# Orchestrator and code health reports (regenerated on each run)
+artifacts/
+reports/
+
+# Local Claude Code settings
+.claude/settings.local.json
+
+# IDE
+.vs/
+.vscode/
+*.user
