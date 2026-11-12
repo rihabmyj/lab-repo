@@ -1,5 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "env": {
+    "DOTNET_CLI_UI_LANGUAGE": "en"
+  },
   "permissions": {
     "allow": [
       "Bash(dotnet build *)",
@@ -12,7 +15,27 @@
       "Bash(git log *)",
       "Bash(git show *)",
       "Bash(git branch *)",
-      "Bash(bash *.claude/skills/smoke-test/smoke.sh)"
+      "Bash(bash *.claude/skills/smoke-test/smoke.sh)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git switch *)",
+      "Bash(git checkout -b *)",
+      "Bash(git stash *)",
+      "Bash(gh pr view *)",
+      "Bash(gh pr list *)",
+      "Bash(gh pr diff *)",
+      "Bash(gh pr checks *)",
+      "Bash(bash *.claude/skills/ship/verifier.sh)",
+      "Bash(dotnet new xunit *)",
+      "Bash(dotnet sln *)",
+      "Bash(dotnet add * reference *)",
+      "Bash(dotnet restore *)",
+      "Bash(dotnet user-secrets init *)",
+      "Bash(gitleaks *)",
+      "Bash(dotnet ef migrations list *)",
+      "Bash(dotnet ef migrations script *)",
+      "Bash(dotnet ef migrations has-pending-model-changes *)",
+      "Bash(bash *.claude/skills/review-migration/essai-ephemere.sh *)"
     ],
     "deny": [
       "Read(./.env)",
@@ -21,10 +44,73 @@
       "Read(**/*.pfx)",
       "Read(**/*.key)",
       "Bash(rm -rf *)",
-      "Bash(sudo *)"
+      "Bash(sudo *)",
+      "Bash(git push *--force*)",
+      "Bash(git push -f *)",
+      "Bash(git push * -f)",
+      "Bash(git push * -f *)",
+      "Bash(git reset --hard *)",
+      "Bash(dotnet user-secrets list *)",
+      "Bash(dotnet user-secrets set *)",
+      "Read(~/.microsoft/usersecrets/**)",
+      "Bash(cat *usersecrets*)",
+      "Read(./**/appsettings.Production.json)",
+      "Read(~/.config/lab-ecommerce/**)"
+    ],
+    "ask": [
+      "Bash(git push *)",
+      "Bash(gh pr create *)",
+      "Bash(gh pr merge *)",
+      "Bash(dotnet ef database update *)",
+      "Bash(dotnet ef migrations add *)"
     ]
   },
-  "env": {
-    "DOTNET_CLI_UI_LANGUAGE": "en"
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/garde-git.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash|Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/bloquer-secrets.sh"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/formater.sh",
+            "timeout": 60
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/stop-tests-verts.sh",
+            "timeout": 300
+          }
+        ]
+      }
+    ]
+  },
+  "enabledPlugins": {
+    "orchestrateur-backlog@marketplace-bbh": true
   }
 }
