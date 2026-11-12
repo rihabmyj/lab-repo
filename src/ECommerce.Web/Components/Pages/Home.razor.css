@@ -1,0 +1,26 @@
+.intro {
+    max-width: var(--reading-max-width);
+    font-size: var(--font-size-lead);
+    color: var(--color-text-muted);
+}
+
+/* Fluid card grid: as many columns as fit, one column on narrow screens. */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr));
+    gap: var(--space-5);
+    margin-top: var(--space-6);
+}
+
+    .card-grid .card-body {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-2);
+    }
+
+    .card-grid .card-text {
+        flex: 1;
+        color: var(--color-text-muted);
+        margin-bottom: var(--space-3);
+    }

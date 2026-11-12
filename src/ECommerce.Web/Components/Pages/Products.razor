@@ -10,61 +10,65 @@
 
 @if (_products is null)
 {
-    <p><em>Loading products…</em></p>
+    <p role="status"><em>Loading products…</em></p>
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Product</th>
-                <th>Description</th>
-                <th class="text-end">Price</th>
-                <th class="text-end">Stock</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var p in _products)
-            {
+    <div class="table-responsive table-card">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
                 <tr>
-                    <td>@p.Name</td>
-                    <td>@p.Description</td>
-                    <td class="text-end">@p.Price.ToString("C")</td>
-                    <td class="text-end">@p.AvailableStock</td>
-                    <td class="text-end">
-                        <button class="btn btn-sm btn-outline-primary" @onclick="() => AddToCart(p)">Add</button>
-                    </td>
+                    <th scope="col">Product</th>
+                    <th scope="col">Description</th>
+                    <th scope="col" class="text-end">Price</th>
+                    <th scope="col" class="text-end">Stock</th>
+                    <th scope="col"></th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var p in _products)
+                {
+                    <tr>
+                        <td class="product-name">@p.Name</td>
+                        <td class="product-description">@p.Description</td>
+                        <td class="text-end numeric">@p.Price.ToString("C")</td>
+                        <td class="text-end numeric">@p.AvailableStock</td>
+                        <td class="text-end">
+                            <button class="btn btn-sm btn-outline-primary" @onclick="() => AddToCart(p)">Add</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 
-    <h2>Cart</h2>
-    @if (_cart.Count == 0)
-    {
-        <p><em>Your cart is empty.</em></p>
-    }
-    else
-    {
-        <ul>
-            @foreach (var line in _cart)
-            {
-                <li>@line.Value × @line.Key.Name (@line.Key.Price.ToString("C"))</li>
-            }
-        </ul>
+    <section class="cart-panel">
+        <h2>Cart</h2>
+        @if (_cart.Count == 0)
+        {
+            <p class="cart-empty"><em>Your cart is empty.</em></p>
+        }
+        else
+        {
+            <ul class="cart-list">
+                @foreach (var line in _cart)
+                {
+                    <li>@line.Value × @line.Key.Name (@line.Key.Price.ToString("C"))</li>
+                }
+            </ul>
 
-        <div class="mb-2">
-            <label class="form-label">Customer name</label>
-            <input class="form-control" style="max-width: 320px" @bind="_customer" />
-        </div>
-        <button class="btn btn-primary" @onclick="PlaceOrder" disabled="@_placing">Place order</button>
-    }
+            <div class="mb-3">
+                <label class="form-label" for="customer-name">Customer name</label>
+                <input id="customer-name" class="form-control customer-input" @bind="_customer" />
+            </div>
+            <button class="btn btn-primary" @onclick="PlaceOrder" disabled="@_placing">Place order</button>
+        }
 
-    @if (!string.IsNullOrEmpty(_message))
-    {
-        <div class="alert @(_isError ? "alert-danger" : "alert-success") mt-3">@_message</div>
-    }
+        @if (!string.IsNullOrEmpty(_message))
+        {
+            <div class="alert @(_isError ? "alert-danger" : "alert-success") mt-3 mb-0" role="@(_isError ? "alert" : "status")">@_message</div>
+        }
+    </section>
 }
 
 @code {

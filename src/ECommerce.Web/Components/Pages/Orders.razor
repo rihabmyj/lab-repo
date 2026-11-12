@@ -5,39 +5,43 @@
 
 <PageTitle>Orders</PageTitle>
 
-<h1>Orders</h1>
+<div class="page-header">
+    <h1>Orders</h1>
 
-<button class="btn btn-sm btn-outline-secondary mb-3" @onclick="Load">Refresh</button>
+    <button class="btn btn-sm btn-outline-secondary" @onclick="Load">Refresh</button>
+</div>
 
 @if (_orders is null)
 {
-    <p><em>Loading orders…</em></p>
+    <p role="status" class="orders-note"><em>Loading orders…</em></p>
 }
 else if (_orders.Count == 0)
 {
-    <p><em>No orders yet. Place one from the <a href="/products">Catalog</a> page.</em></p>
+    <p class="orders-note"><em>No orders yet. Place one from the <a href="/products">Catalog</a> page.</em></p>
 }
 else
 {
-    @foreach (var order in _orders)
-    {
-        <div class="card mb-3">
-            <div class="card-header d-flex justify-content-between">
-                <span><strong>Order #@order.Id</strong> — @order.Customer</span>
-                <span class="badge bg-info text-dark">@order.Status</span>
+    <div class="order-grid">
+        @foreach (var order in _orders)
+        {
+            <div class="card order-card">
+                <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <span><strong>Order #@order.Id</strong> — @order.Customer</span>
+                    <span class="badge status-badge" data-status="@order.Status">@order.Status</span>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted">Placed @order.CreatedAt.LocalDateTime</p>
+                    <ul class="order-items">
+                        @foreach (var item in order.Items)
+                        {
+                            <li>@item.Quantity × @item.ProductName @@ @item.UnitPrice.ToString("C")</li>
+                        }
+                    </ul>
+                    <strong class="order-total">Total: @order.Total.ToString("C")</strong>
+                </div>
             </div>
-            <div class="card-body">
-                <p class="text-muted">Placed @order.CreatedAt.LocalDateTime</p>
-                <ul>
-                    @foreach (var item in order.Items)
-                    {
-                        <li>@item.Quantity × @item.ProductName @@ @item.UnitPrice.ToString("C")</li>
-                    }
-                </ul>
-                <strong>Total: @order.Total.ToString("C")</strong>
-            </div>
-        </div>
-    }
+        }
+    </div>
 }
 
 @code {

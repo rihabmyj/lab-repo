@@ -1,0 +1,74 @@
+/* Product table: a card-like container that scrolls horizontally on its own
+   on narrow screens, so the page itself never scrolls sideways. */
+.table-card {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: var(--space-6);
+}
+
+    .table-card th {
+        background-color: var(--color-surface-2);
+        color: var(--color-text-muted);
+        font-size: var(--font-size-sm);
+        font-weight: var(--font-weight-semibold);
+        white-space: nowrap;
+        vertical-align: bottom;
+    }
+
+    .table-card th,
+    .table-card td {
+        padding: var(--space-3) var(--space-4);
+    }
+
+    .table-card tbody tr:last-child td {
+        border-bottom-width: 0;
+    }
+
+    .table-card .product-name {
+        font-weight: var(--font-weight-semibold);
+        white-space: nowrap;
+    }
+
+    .table-card .product-description {
+        color: var(--color-text-muted);
+        min-width: 12rem;
+    }
+
+    /* Prices and stock: right aligned, digits of equal width. */
+    .table-card .numeric {
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+    }
+
+.cart-panel {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    padding: var(--space-5);
+}
+
+    .cart-panel h2 {
+        margin-bottom: var(--space-4);
+    }
+
+.cart-empty {
+    color: var(--color-text-muted);
+    margin-bottom: 0;
+}
+
+.cart-list {
+    padding-left: var(--space-5);
+    margin-bottom: var(--space-5);
+}
+
+    .cart-list li + li {
+        margin-top: var(--space-1);
+    }
+
+.customer-input {
+    width: 100%;
+    max-width: 20rem;
+}
