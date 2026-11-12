@@ -9,8 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddServiceDefaults();
 
 builder.Services.AddOpenApi();
-builder.Services.AddDbContext<OrderingDbContext>(options =>
-    options.UseInMemoryDatabase("ordering"));
+// PostgreSQL database "orderingdb", declared in the AppHost (connection string injected by Aspire).
+builder.AddNpgsqlDbContext<OrderingDbContext>("orderingdb");
 
 // Serialize enums (e.g. OrderStatus) as strings rather than integers.
 builder.Services.ConfigureHttpJsonOptions(options =>
@@ -33,10 +33,12 @@ if (app.Environment.IsDevelopment())
 
 app.MapOrderingEndpoints();
 
+// Apply pending migrations on startup. EF Core takes a lock, so replicas starting together
+// do not run them twice. A production pipeline can run a migration bundle instead.
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<OrderingDbContext>();
-    db.Database.EnsureCreated();
+    db.Database.Migrate();
 }
 
 app.Run();

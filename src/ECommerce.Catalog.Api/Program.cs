@@ -8,8 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddServiceDefaults();
 
 builder.Services.AddOpenApi();
-builder.Services.AddDbContext<CatalogDbContext>(options =>
-    options.UseInMemoryDatabase("catalog"));
+// PostgreSQL database "catalogdb", declared in the AppHost (connection string injected by Aspire).
+builder.AddNpgsqlDbContext<CatalogDbContext>("catalogdb");
 
 var app = builder.Build();
 
@@ -23,11 +23,12 @@ if (app.Environment.IsDevelopment())
 
 app.MapCatalogEndpoints();
 
-// Ensure the in-memory database is created and seeded on startup.
+// Apply pending migrations on startup. EF Core takes a lock, so replicas starting together
+// do not run them twice. A production pipeline can run a migration bundle instead.
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<CatalogDbContext>();
-    db.Database.EnsureCreated();
+    db.Database.Migrate();
 }
 
 app.Run();

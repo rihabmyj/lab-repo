@@ -15,4 +15,13 @@
     <UserSecretsId>e2273b07-816a-4277-92ec-76e6d772ad39</UserSecretsId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.PostgreSQL" Version="13.4.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Transitive via Aspire.Hosting: pinned to a version without known vulnerabilities. -->
+    <PackageReference Include="MessagePack" Version="2.5.307" />
+  </ItemGroup>
+
 </Project>
