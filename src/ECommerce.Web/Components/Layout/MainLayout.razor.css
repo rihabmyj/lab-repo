@@ -2,32 +2,40 @@
     position: relative;
     display: flex;
     flex-direction: column;
+    min-height: 100vh;
 }
 
 main {
     flex: 1;
+    /* Lets the flex child shrink below its content width: no horizontal page scroll. */
+    min-width: 0;
 }
 
 .sidebar {
-    background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
+    background-color: var(--color-sidebar-bg);
 }
 
 .top-row {
-    background-color: #f7f7f7;
-    border-bottom: 1px solid #d6d5d5;
+    background-color: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
     justify-content: flex-end;
-    height: 3.5rem;
+    height: var(--topbar-height);
     display: flex;
     align-items: center;
 }
 
     .top-row ::deep a, .top-row ::deep .btn-link {
         white-space: nowrap;
-        margin-left: 1.5rem;
+        margin-left: var(--space-5);
+        color: var(--color-text-muted);
+        font-weight: var(--font-weight-medium);
         text-decoration: none;
+        border-radius: var(--radius-sm);
+        transition: color var(--duration-fast) var(--ease);
     }
 
     .top-row ::deep a:hover, .top-row ::deep .btn-link:hover {
+        color: var(--color-link);
         text-decoration: underline;
     }
 
@@ -35,6 +43,16 @@ main {
         overflow: hidden;
         text-overflow: ellipsis;
     }
+
+/* Centered content column with a maximum reading width. */
+.content {
+    width: 100%;
+    max-width: var(--content-max-width);
+    margin-inline: auto;
+    padding-top: var(--space-6);
+    padding-bottom: var(--space-7);
+    overflow-wrap: break-word;
+}
 
 @media (max-width: 640.98px) {
     .top-row {
@@ -44,6 +62,10 @@ main {
     .top-row ::deep a, .top-row ::deep .btn-link {
         margin-left: 0;
     }
+
+    .content {
+        padding-top: var(--space-5);
+    }
 }
 
 @media (min-width: 641px) {
@@ -52,10 +74,12 @@ main {
     }
 
     .sidebar {
-        width: 250px;
+        width: var(--sidebar-width);
+        flex-shrink: 0;
         height: 100vh;
         position: sticky;
         top: 0;
+        border-right: 1px solid var(--color-border);
     }
 
     .top-row {
@@ -76,11 +100,17 @@ main {
     }
 }
 
+@media (prefers-reduced-motion: reduce) {
+    .top-row ::deep a, .top-row ::deep .btn-link {
+        transition: none;
+    }
+}
+
 #blazor-error-ui {
-    color-scheme: light only;
-    background: lightyellow;
+    background: var(--color-error-ui-bg);
+    color: var(--color-error-ui-text);
     bottom: 0;
-    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--shadow-md);
     box-sizing: border-box;
     display: none;
     left: 0;
